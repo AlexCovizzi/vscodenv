@@ -4,13 +4,14 @@ from .vscode_extensions import *
 from .extensions_json import *
 from .vscode_cli import code_open
 
-parser = argparse.ArgumentParser(description='')
+parser = argparse.ArgumentParser(description='', add_help=False)
 parser.add_argument("path", metavar='',nargs='?', default=os.getcwd(), help=argparse.SUPPRESS)
 group = parser.add_mutually_exclusive_group()
-group.add_argument("-i", "--install", metavar='', nargs='?', const="", required=False, help="Install an extension.")
+group.add_argument("-i", "--install", metavar='', nargs='?', const="", required=False)
 # group.add_argument("-g", "--install-global", metavar='', nargs='?', const="", required=False, help="Install an extension globally and symlink it locally.")
-group.add_argument("-u", "--uninstall", metavar='', required=False, help="Uninstall an extension.")
-group.add_argument("-l", "--list", action='store_true', help="List installed extensions")
+group.add_argument("-u", "--uninstall", metavar='', required=False)
+group.add_argument("-l", "--list", action='store_true')
+group.add_argument("-h", "--help", action='store_true')
 # group.add_argument("-r", "--generate-required", action='store_true', help="Set all your local extensions as required.")
 
 def main():
@@ -23,6 +24,7 @@ def main():
     install_ext = args.install
     uninstall_ext = args.uninstall
     list_ext = args.list
+    show_help = args.help
 
     if install_ext is not None:
         install(install_ext, extensions_dir)
@@ -30,6 +32,8 @@ def main():
         uninstall(uninstall_ext, extensions_dir)
     elif list_ext:
         list_extensions(extensions_dir)
+    elif show_help:
+        print_help()
     else:
         code_open(extensions_dir)
 
@@ -62,4 +66,9 @@ def list_extensions(extensions_dir):
     for extension in extensions:
         print(extension)
 
-
+# --help
+# because argparse help message is formatted ugly
+def print_help():
+    help_file_path = os.path.join(os.path.dirname(__file__), "help.txt")
+    with open(help_file_path, 'r') as help_file:
+        print(help_file.read())
