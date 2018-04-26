@@ -70,5 +70,13 @@ def list_extensions(extensions_dir):
 # because argparse help message is formatted ugly
 def print_help():
     help_file_path = os.path.join(os.path.dirname(__file__), "help.txt")
-    with open(help_file_path, 'r') as help_file:
-        print(help_file.read())
+    try:
+        with open(help_file_path, 'r') as help_file:
+            print(help_file.read())
+    except IOError:
+        try:
+            ans = input("Did you remove 'help.txt' ?? [y/n]: ")
+            if ans == 'y':
+                print("https://i.imgur.com/Br00TCn.gif")
+        except KeyboardInterrupt:
+            print("iao!")
