@@ -1,6 +1,7 @@
 {
-    "recommendations": [],
     "required": [
         "ms-python.python"
+    ],
+    "recommendations": [
     ]
 }
