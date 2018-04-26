@@ -16,5 +16,6 @@ def code_open(extensions_dir):
 def _code_execute(*args):
     command = list(args)
     command.insert(0, "code")
-    proc = Popen(command, stdout=stdout, stderr=stderr)
-    proc.wait()
+    proc = Popen(command, stdout=stdout, stderr=PIPE, universal_newlines=True)
+    _,err = proc.communicate()
+    return err
