@@ -1,4 +1,5 @@
 import json
+import os
 
 def get_required_extensions(extensions_json_path):
     '''
@@ -28,6 +29,11 @@ def extend_recommended_extensions(extensions_json_path, extensions):
 
 def _extend_list_json(path_json, list_key, values):
     try:
+        # create file if it does not exist
+        if not os.path.exists(path_json):
+            f = open(path_json,"w+")
+            f.close()
+        
         with open(path_json, 'r+') as file_json:
             data = {}
             try:
@@ -57,11 +63,14 @@ def _extend_list_json(path_json, list_key, values):
 def _parse_json(path_json, key):
     values = []
     try:
-        file_json = json.load(open(path_json))
-        values = file_json[key]
+        with open(path_json) as file_json:
+            data = json.load(file_json)
+            values = data[key]
     except IOError:
         pass
     except KeyError:
         pass
     finally:
+        if type(values) is str:
+            values = [values]
         return values
