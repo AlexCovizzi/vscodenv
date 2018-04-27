@@ -1,9 +1,11 @@
-vscodenv 0.0.1
+vscodenv 0.1
 
 Usage: vscode [path] [options]
 
 Options:
-    -i, --install [extension]      Install an extension.
-    -u, --uninstall [extension]    Uninstall an extension.
-    -l, --list                     List installed extensions
-    -h, --help                     Show this message and exit.
+    -i, --install [extension]       Install an extension. If no extension is passed,
+                                    install required extension from extensions.json
+    -u, --uninstall <extension>     Uninstall an extension
+    -l, --list                      List installed extensions
+    -r, --generate-required         Add installed extensions to required in extensions.json
+    -h, --help                      Show this message and exit
