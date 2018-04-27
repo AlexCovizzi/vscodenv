@@ -3,6 +3,7 @@ import os
 from .vscode_extensions import *
 from .extensions_json import *
 from .vscode_cli import code_open
+from .utils import extension_base_name
 
 parser = argparse.ArgumentParser(description='', add_help=False)
 parser.add_argument("path", metavar='',nargs='?', default=os.getcwd(), help=argparse.SUPPRESS)
@@ -35,6 +36,7 @@ def main():
     elif show_help:
         print_help()
     else:
+        install_required(extensions_dir)
         code_open(extensions_dir)
 
 
@@ -48,12 +50,7 @@ def install(extension, extensions_dir):
             install_extension(extension, extensions_dir)
     else:
         # no param passed, install everything from extensions.json
-        extensions_json_path = extensions_dir + ".json"
-        required_extensions = get_required_extensions(extensions_json_path)
-        # print("Found %d extensions to install: %s" % (len(required_extensions), *required_extensions))
-
-        for required_ext in required_extensions:
-            install_extension(required_ext, extensions_dir)
+        install_required(extensions_dir)
 
 # --unistall
 def uninstall(extension, extensions_dir):
@@ -64,7 +61,8 @@ def uninstall(extension, extensions_dir):
 def list_extensions(extensions_dir):
     extensions = get_extensions(extensions_dir)
     for extension in extensions:
-        print(extension)
+        base_name = extension_base_name(extension)
+        print(base_name)
 
 # --help
 # because argparse help message is formatted ugly
@@ -80,3 +78,11 @@ def print_help():
                 print("https://i.imgur.com/Br00TCn.gif")
         except KeyboardInterrupt:
             print("iao!")
+
+def install_required(extensions_dir):
+    extensions_json_path = extensions_dir + ".json"
+    required_extensions = get_required_extensions(extensions_json_path)
+    # print("Found %d extensions to install: %s" % (len(required_extensions), *required_extensions))
+
+    for required_ext in required_extensions:
+        install_extension(required_ext, extensions_dir)

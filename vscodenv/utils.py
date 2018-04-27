@@ -11,3 +11,14 @@ def get_global_extensions_dir():
     default_global_extensions_dir = path.join(path.expanduser("~"), '.vscode', 'extensions')
     global_extensions_dir = environ.get('VSCODE_EXTENSIONS', default_global_extensions_dir)
     return global_extensions_dir
+
+def extension_base_name(extension):
+    last_dot = extension.rfind('.')
+    n = extension[last_dot+1:]
+    if n.isdigit():
+        last_dash = extension.rfind('-')
+        base_name = extension[:last_dash]
+        # version = extension[last_dash+1:]
+        return base_name
+    else:
+        return extension
