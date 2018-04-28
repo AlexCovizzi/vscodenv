@@ -109,13 +109,13 @@ def install_required(extensions_dir):
 
     # install only required extensions that are not already installed
     extensions_to_install = list(set(required_extensions) - set(installed_extensions))
-
+    
     if extensions_to_install:
-        print("Found %d extensions to install: %s" % (
-            len(extensions_to_install),
-            *extensions_to_install))
+        print("Found %d extensions to install:" % len(extensions_to_install))
+        for ext_to_install in extensions_to_install:
+            print(ext_to_install)
     else:
         print("No extension to install.")
 
-    for required_ext in required_extensions:
-        install_extension(required_ext, extensions_dir)
+    for ext in extensions_to_install:
+        install_extension(ext, extensions_dir)

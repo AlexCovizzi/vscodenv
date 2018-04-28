@@ -6,11 +6,13 @@ from sys import stdout, stderr
 
 def code_install(extension, extensions_dir):
     err = _code_execute("--extensions-dir", extensions_dir, "--install-extension", extension)
-    print(err)
+    if err:
+        print(err)
 
 def code_uninstall(extension, extensions_dir):
     err = _code_execute("--extensions-dir", extensions_dir, "--uninstall-extension", extension)
-    print(err)
+    if err:
+        print(err)
 
 def code_open(path, extensions_dir):
     _code_execute(path, "--extensions-dir", extensions_dir)

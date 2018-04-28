@@ -10,13 +10,28 @@ import json
 def install_extension(extension, extensions_dir):
     global_extensions_dir = get_global_extensions_dir()
     installed_extension = is_extension_installed(extension, global_extensions_dir)
+
+    obsolete_extensions = parse_dot_obsolete(extensions_dir)
+    # keep only base name
+    obsolete_extensions = [extension_base_name(ext) for ext in obsolete_extensions]
+    if extension in obsolete_extensions:
+        remove_from_dot_obsolete(extension, extensions_dir)
+        
     if installed_extension:
+        print("Found extension %s in '%s'" % (extension, global_extensions_dir))
         installed_extension_path = os.path.join(global_extensions_dir, installed_extension)
         local_extension_path = os.path.join(extensions_dir, installed_extension)
         try:
+            if not os.path.isdir(extensions_dir):
+                os.mkdir(extensions_dir)
             os.symlink(installed_extension_path, local_extension_path)
-        except IOError:
-            pass
+            print("Created symlink.")
+        except FileExistsError:
+            print("Symlink already exists.")
+        except IOError as e:
+            print("Failed to create symlink: %s" % e)
+            print("Installing extension '%s' from marketplace" % extension)
+            vscode_cli.code_install(extension, extensions_dir)
     else:
         vscode_cli.code_install(extension, extensions_dir)
 
@@ -28,11 +43,9 @@ def is_extension_installed(extension, extensions_dir):
     Check if the extension is already in the directory specified.
     If it is the full name of the extension (name-version) is returned otherwise None is returned.
     '''
-    if not extensions_dir:
-        extensions_dir = get_global_extensions_dir()
     installed_extensions = get_extensions(extensions_dir)
     for installed_extension in installed_extensions:
-        if installed_extension.startswith(extension):
+        if extension == extension_base_name(installed_extension):
             return installed_extension
     return None
 
@@ -76,3 +89,16 @@ def parse_dot_obsolete(extensions_dir):
             pass
 
     return obsolete_extensions
+
+def remove_from_dot_obsolete(extension, extensions_dir):
+    obsolete_extensions = parse_dot_obsolete(extensions_dir)
+    try:
+        dot_obsolete_path = os.path.join(extensions_dir, '.obsolete')
+        with open(dot_obsolete_path, 'w') as dot_obsolete_file:
+            data = {}
+            for obsolete_extension in obsolete_extensions:
+                if extension != extension_base_name(obsolete_extension):
+                    data[obsolete_extension] = True
+            json.dump(data, dot_obsolete_file)
+    except IOError:
+        pass
