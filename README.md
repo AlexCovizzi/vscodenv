@@ -18,7 +18,7 @@ Project-level extensions for Visual Studio Code.
    command-line utility.
 
     ~~~ sh
-    $ echo 'export PATH="$HOME/.vscodenv/bin:$PATH"' >> ~/.bash_profile
+    $ echo 'export PATH="$HOME/.vscodenv:$PATH"' >> ~/.bash_profile
     ~~~
 
     **Ubuntu note**: Modify your `~/.bashrc` instead of `~/.bash_profile`.
