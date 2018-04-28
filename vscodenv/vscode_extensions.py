@@ -8,14 +8,16 @@ import json
 
 
 def install_extension(extension, extensions_dir):
+    # if the extension is in the uninstalled extensions remove it
+    uninstalled_extensions = get_uninstalled_extensions(extensions_dir)
+    # keep only base name
+    uninstalled_extensions = [extension_base_name(ext) for ext in uninstalled_extensions]
+    if extension in uninstalled_extensions:
+        remove_extension_from_uninstalled(extension, extensions_dir)
+
     global_extensions_dir = get_global_extensions_dir()
     installed_extension = is_extension_installed(extension, global_extensions_dir)
 
-    obsolete_extensions = parse_dot_obsolete(extensions_dir)
-    # keep only base name
-    obsolete_extensions = [extension_base_name(ext) for ext in obsolete_extensions]
-    if extension in obsolete_extensions:
-        remove_from_dot_obsolete(extension, extensions_dir)
         
     if installed_extension:
         print("Found extension %s in '%s'" % (extension, global_extensions_dir))
@@ -62,7 +64,7 @@ def get_extensions(extensions_dir):
     except IOError:
         pass
     
-    obsolete_extensions = parse_dot_obsolete(extensions_dir)
+    obsolete_extensions = get_uninstalled_extensions(extensions_dir)
     for candidate in candidate_extensions:
         candidate_path = os.path.join(extensions_dir, candidate)
         # an extension MUST be a directory
@@ -76,29 +78,32 @@ def get_extensions(extensions_dir):
                 extensions.append(candidate)
     return extensions
 
-def parse_dot_obsolete(extensions_dir):
+def get_uninstalled_extensions(extensions_dir):
+    # extensions to be uninstalled are in a .obsolete file
     dot_obsolete_path = os.path.join(extensions_dir, '.obsolete')
-    obsolete_extensions = []
+    uninstalled_extensions = []
     if os.path.exists(dot_obsolete_path):
         try:
-            data = json.load(open(dot_obsolete_path))
-            obsolete_extensions = list(data.keys())
+            with open(dot_obsolete_path) as f:
+                data = json.load(f)
+                uninstalled_extensions = list(data.keys())
         except IOError:
             pass
         except json.JSONDecodeError:
             pass
 
-    return obsolete_extensions
+    return uninstalled_extensions
 
-def remove_from_dot_obsolete(extension, extensions_dir):
-    obsolete_extensions = parse_dot_obsolete(extensions_dir)
+def remove_extension_from_uninstalled(extension, extensions_dir):
+    uninstalled_extensions = get_uninstalled_extensions(extensions_dir)
     try:
+        # extensions to be uninstalled are in a .obsolete file
         dot_obsolete_path = os.path.join(extensions_dir, '.obsolete')
         with open(dot_obsolete_path, 'w') as dot_obsolete_file:
             data = {}
-            for obsolete_extension in obsolete_extensions:
-                if extension != extension_base_name(obsolete_extension):
-                    data[obsolete_extension] = True
+            for uninstalled_extension in uninstalled_extensions:
+                if extension != extension_base_name(uninstalled_extension):
+                    data[uninstalled_extension] = True
             json.dump(data, dot_obsolete_file)
     except IOError:
         pass
