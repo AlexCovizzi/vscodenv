@@ -119,3 +119,4 @@ def install_required(extensions_dir):
 
     for ext in extensions_to_install:
         install_extension(ext, extensions_dir)
+
