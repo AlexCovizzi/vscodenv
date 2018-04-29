@@ -17,8 +17,7 @@ def install_extension(extension, extensions_dir):
 
     global_extensions_dir = get_global_extensions_dir()
     installed_extension = is_extension_installed(extension, global_extensions_dir)
-
-        
+    
     if installed_extension:
         print("Found extension %s in '%s'" % (extension, global_extensions_dir))
         installed_extension_path = os.path.join(global_extensions_dir, installed_extension)
@@ -32,7 +31,7 @@ def install_extension(extension, extensions_dir):
             print("Symlink already exists.")
         except IOError as e:
             print("Failed to create symlink: %s" % e)
-            print("Installing extension '%s' from marketplace" % extension)
+            print("Searching extension '%s' in marketplace." % extension)
             vscode_cli.code_install(extension, extensions_dir)
     else:
         vscode_cli.code_install(extension, extensions_dir)

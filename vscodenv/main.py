@@ -78,7 +78,13 @@ def generate_required(extensions_dir):
     # keep only base name
     extensions = [extension_base_name(ext) for ext in extensions]
     extensions_json_path = os.path.join(os.path.dirname(extensions_dir), "extensions.json")
-    extend_required_extensions(extensions_json_path, extensions)
+    if extensions:
+        extend_required_extensions(extensions_json_path, extensions)
+        print("Added %d extensions to required extensions:" % len(extensions))
+        for ext in extensions:
+            print(ext)
+    else:
+        print("No extension added to required extensions.")
 
 
 # --help

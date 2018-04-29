@@ -21,7 +21,7 @@ class TestExtensionsJson(unittest.TestCase):
 
     def test_parse_json_should_return_values(self):
         ret = extensions_json._parse_json(self.json_path, self.json_key)
-        self.assertEqual(ret, self.json_values)
+        self.assertCountEqual(ret, self.json_values)
 
     def test_parse_json_should_return_empty_if_malformed(self):
         ret = extensions_json._parse_json(self.malformed_json_path, self.json_key)
@@ -51,7 +51,7 @@ class TestExtensionsJson(unittest.TestCase):
             data = json.load(file_json)
             json_values = data[self.json_key]
 
-        self.assertEqual(json_values, result)
+        self.assertCountEqual(json_values, result)
 
     def test_extend_list_json_should_create_new_file_if_not_exists(self):
         values = ['extension-1', 'extension-3', 'extension-4']
@@ -61,7 +61,7 @@ class TestExtensionsJson(unittest.TestCase):
             data = json.load(file_json)
             json_values = data[self.json_key]
 
-        self.assertEqual(json_values, values)
+        self.assertCountEqual(json_values, values)
 
     def tearDown(self):
         try:
