@@ -26,7 +26,7 @@ Finally you can set all the extensions installed in your workspace as required (
     $ git clone https://github.com/AlexCovizzi/vscodenv.git ~/.vscodenv
     ~~~
 
-2. Add `~/.vscodenv/bin` to your `$PATH` for access to the `vscode`
+2. Add `~/.vscodenv` to your `$PATH` for access to the `vscode`
    command-line utility.
 
     ~~~ sh
