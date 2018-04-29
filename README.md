@@ -4,7 +4,17 @@ Project-level extensions for Visual Studio Code.
 
 ## How it works
 
-#
+This command line tool leverages the VSCode CLI to manage your extensions on a project level.
+
+You can open Visual Studio Code from the console using the command `vscode`, the workspace is then opened loading only the extensions found in that workspace's `.vscode/extensions`.
+
+When you open a workspace this way every required extension in `.vscode/extensions.json` is installed for that workspace.
+
+To install an extension in your workspace you can run the command `vscode -i <extension-id>` or, after launching Visual Studio Code with the command `vscode`, you can install an extension from the marketplace like you normally do.  
+**Note**: using the command `vscode -i <extension-id>`, if the extension is found in `~/.vscode/extensions`, the extension will not be downloaded but symlinked.
+
+Finally you can set all the extensions installed in your workspace as required (in `.vscode/extensions.json`) using the command `vscode --generate-required`.
+
 
 ## Installation
 
