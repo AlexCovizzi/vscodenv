@@ -39,6 +39,16 @@ Finally you can set all the extensions installed in your workspace as required (
 
 3. Restart your shell so that PATH changes take effect. (Opening a new
    terminal tab will usually do it.)
+   
+4. Add in your user settings:
+    ~~~ json
+    "files.exclude": {
+        "**/.vscode/extensions/*/*": true,
+    },
+    "files.watcherExclude": {
+        "**/.vscode/extensions/*/*": true,
+    },
+    ~~~
 
 ### Upgrading
 
