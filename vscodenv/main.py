@@ -3,7 +3,7 @@ import os
 from .vscode_extensions import *
 from .extensions_json import *
 from .vscode_cli import code_open
-from .utils import extension_base_name
+from .utils import extension_base_name, get_work_dir
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument("path", nargs='?', default=os.getcwd())
@@ -19,7 +19,7 @@ def main():
     args = parser.parse_args()
 
     path = args.path
-    work_dir = path if os.path.isdir(path) else os.path.dirname(path)
+    work_dir = get_work_dir(path)
     dot_vscode_dir = os.path.join(work_dir, '.vscode')
     extensions_dir = os.path.join(dot_vscode_dir, 'extensions')
 
@@ -78,7 +78,13 @@ def generate_required(extensions_dir):
     # keep only base name
     extensions = [extension_base_name(ext) for ext in extensions]
     extensions_json_path = os.path.join(os.path.dirname(extensions_dir), "extensions.json")
-    extend_required_extensions(extensions_json_path, extensions)
+    if extensions:
+        extend_required_extensions(extensions_json_path, extensions)
+        print("Added %d extensions to required extensions:" % len(extensions))
+        for ext in extensions:
+            print(ext)
+    else:
+        print("No extension added to required extensions.")
 
 
 # --help
