@@ -6,7 +6,9 @@ Project-level extensions for Visual Studio Code.
 
 This command line tool leverages the VSCode CLI to manage your extensions on a project level.
 
-You can open Visual Studio Code from the console using the command `vscode`, the workspace is then opened loading only the extensions found in that workspace's `.vscode/extensions`.
+Projects' extensions are stored in the `.vscode/extensions` directory.
+
+You can launch Visual Studio Code from the console using the command `vscode`, the workspace is then opened loading only the extensions found in that workspace's `.vscode/extensions`.
 
 When you open a workspace this way every required extension in `.vscode/extensions.json` is installed for that workspace.
 
